@@ -182,7 +182,7 @@ export class MarketEngine {
       const roundedPrice = roundMoney(nextPrice);
       this.state.prices[stock.symbol] = roundedPrice;
       const history = this.state.history[stock.symbol] ?? [];
-      if (history.length === 0 || now - this.lastTickMs >= 30_000) {
+      if (history.length === 0 || now - this.lastTickMs >= 60_000) {
         this.state.history[stock.symbol] = [...history, roundedPrice].slice(-HISTORY_LIMIT);
       }
     }

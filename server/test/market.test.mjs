@@ -44,12 +44,16 @@ test("continuous ticks move prices and retain a bounded price history", () => {
   const before = market.snapshot().stocks[0];
   assert.ok(before);
 
-  market.tick(Date.now() + 30_000);
+  market.tick(Date.now() + 60_000);
   const after = market.snapshot().stocks[0];
   assert.ok(after);
   assert.notEqual(after.price, before.price);
   assert.equal(after.history.length, 2);
   assert.equal(market.persistedState().lastUpdated, after && market.snapshot().lastUpdated);
+
+  const start = Date.now();
+  for (let minute = 1; minute <= 65; minute += 1) market.tick(start + minute * 60_000);
+  assert.equal(market.snapshot().stocks[0].history.length, 60);
 });
 
 test("restores only valid known symbols from persisted state", () => {

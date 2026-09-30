@@ -205,7 +205,7 @@ function StockDetail({
         <span className={`stock-avatar large ${stock.symbol.slice(0, 1).toLowerCase()}`}>{stock.symbol.slice(0, 1)}</span>
         <div><div className="company-title">{stock.name} <span className="symbol-tag">{stock.symbol}</span></div><div className="company-sector">{stock.sector}</div></div>
       </div>
-      <span className="exchange-tag">NYSE · SIM</span>
+      <span className="exchange-tag">SIMULATED</span>
     </div>
     <div className="quote-line">
       <div><span className="quote-price">{money.format(stock.price)}</span><span className={`quote-change ${tone(stock.changePercent)}`}>{formatPercent(stock.changePercent)}</span></div>
