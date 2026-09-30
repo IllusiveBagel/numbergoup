@@ -4,11 +4,10 @@ import { money } from "../utils/format";
 interface TradeHistoryProps {
   trades: Trade[];
   stocks: StockQuote[];
-  limit?: number;
 }
 
-export default function TradeHistory({ trades, stocks, limit }: TradeHistoryProps) {
-  const visible = limit ? [...trades].reverse().slice(0, limit) : [...trades].reverse();
+export default function TradeHistory({ trades, stocks }: TradeHistoryProps) {
+  const visible = [...trades].reverse();
   return <article className="panel activity-panel">
     <div className="panel-heading">
       <div><h2>Recent activity</h2><p>Your latest trades</p></div>

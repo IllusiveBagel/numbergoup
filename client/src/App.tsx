@@ -82,7 +82,7 @@ export default function App() {
   return (
     <div className="app-shell">
       <NavBar dateLabel={dateLabel} page={page} onNavigate={setPage} />
-      <main className={`dashboard ${page === "activity" ? "activity-page" : "trading-page"}`}>
+      <main className="dashboard">
         {message && <div className={`notice ${message.includes("Bought") || message.includes("Sold") ? "success" : "error"}`} role="status">{message}</div>}
         {page === "trading" ? (
           <>
