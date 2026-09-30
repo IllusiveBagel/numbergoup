@@ -5,9 +5,7 @@ import PortfolioOverview from "./components/PortfolioOverview";
 import StockDetail from "./components/StockDetail";
 import TradeHistory from "./components/TradeHistory";
 import Watchlist from "./components/Watchlist";
-import type { MarketState, Trade } from "./types";
-
-type Page = "trading" | "activity";
+import type { MarketState, Page, Trade } from "./types";
 
 export default function App() {
   const [market, setMarket] = useState<MarketState | null>(null);

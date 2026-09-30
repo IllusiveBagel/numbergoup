@@ -1,4 +1,4 @@
-type Page = "trading" | "activity";
+import type { Page } from "../types";
 
 interface NavBarProps {
   dateLabel: string;
