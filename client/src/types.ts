@@ -30,3 +30,5 @@ export interface MarketState {
   totalReturn: number;
   lastUpdated: string;
 }
+
+export type Page = "trading" | "activity";
