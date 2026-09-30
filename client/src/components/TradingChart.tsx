@@ -33,7 +33,8 @@ export default function TradingChart({ stock }: TradingChartProps) {
   const onPointerMove = (event: PointerEvent<SVGSVGElement>) => {
     if (values.length < 2) return;
     const bounds = event.currentTarget.getBoundingClientRect();
-    const ratio = Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width));
+    const chartX = ((event.clientX - bounds.left) / bounds.width) * 1000;
+    const ratio = Math.max(0, Math.min(1, (chartX - plot.left) / (plot.right - plot.left)));
     setHoveredIndex(Math.round(ratio * (values.length - 1)));
   };
 
