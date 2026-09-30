@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
-import MarketHeader from "./components/MarketHeader";
+import NavBar from "./components/NavBar";
 import PortfolioOverview from "./components/PortfolioOverview";
 import StockDetail from "./components/StockDetail";
 import TradeHistory from "./components/TradeHistory";
 import Watchlist from "./components/Watchlist";
 import type { MarketState, Trade } from "./types";
+
+type Page = "trading" | "activity";
 
 export default function App() {
   const [market, setMarket] = useState<MarketState | null>(null);
@@ -15,6 +17,7 @@ export default function App() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [ordering, setOrdering] = useState(false);
+  const [page, setPage] = useState<Page>("trading");
 
   const refresh = useCallback(async () => {
     try {
@@ -78,36 +81,40 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <MarketHeader dateLabel={dateLabel} />
-      <main className="dashboard">
-        <PortfolioOverview market={market} selectedStock={selectedStock} />
+      <NavBar dateLabel={dateLabel} page={page} onNavigate={setPage} />
+      <main className={`dashboard ${page === "activity" ? "activity-page" : "trading-page"}`}>
         {message && <div className={`notice ${message.includes("Bought") || message.includes("Sold") ? "success" : "error"}`} role="status">{message}</div>}
-        <section className="workspace">
-          <Watchlist
-            stocks={market?.stocks ?? []}
-            holdings={market?.holdings ?? {}}
-            selectedSymbol={selectedSymbol}
-            onSelect={setSelectedSymbol}
-          />
-          <section className="main-column">
-            {selectedStock ? (
-              <StockDetail
-                stock={selectedStock}
-                shares={ownedShares}
-                side={side}
-                setSide={setSide}
-                quantity={shares}
-                setQuantity={setShares}
-                estimatedTotal={estimatedTotal}
-                cash={market?.cash ?? 0}
-                ordering={ordering}
-                onTrade={onTrade}
+        {page === "trading" ? (
+          <>
+            <PortfolioOverview market={market} selectedStock={selectedStock} />
+            <section className="workspace">
+              <Watchlist
+                stocks={market?.stocks ?? []}
+                holdings={market?.holdings ?? {}}
+                selectedSymbol={selectedSymbol}
+                onSelect={setSelectedSymbol}
               />
-            ) : <article className="panel empty-panel">Waiting for market data…</article>}
-            <TradeHistory trades={market?.transactions ?? []} stocks={market?.stocks ?? []} />
-          </section>
-        </section>
-        <footer className="footer-note">A little game of what if. All prices and trades are simulated and have no real-world value.</footer>
+              <section className="main-column">
+                {selectedStock ? (
+                  <StockDetail
+                    stock={selectedStock}
+                    shares={ownedShares}
+                    side={side}
+                    setSide={setSide}
+                    quantity={shares}
+                    setQuantity={setShares}
+                    estimatedTotal={estimatedTotal}
+                    cash={market?.cash ?? 0}
+                    ordering={ordering}
+                    onTrade={onTrade}
+                  />
+                ) : <article className="panel empty-panel">Waiting for market data…</article>}
+              </section>
+            </section>
+          </>
+        ) : (
+          <TradeHistory trades={market?.transactions ?? []} stocks={market?.stocks ?? []} />
+        )}
       </main>
     </div>
   );
