@@ -9,6 +9,7 @@ services:
       DATA_DIR: /data
       LOG_TO_FILE: ${LOG_TO_FILE:-false}
       SIMULATION_INTERVAL_MS: ${SIMULATION_INTERVAL_MS:-1000}
+      SIMULATION_SPEED: ${SIMULATION_SPEED:-10}
     volumes:
       - numbergoup-data:/data
     healthcheck:

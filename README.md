@@ -33,7 +33,7 @@ npm run start:server
 npm run dev:client
 ```
 
-The API listens on port 3000 and the Vite UI on port 5173. The UI proxies API requests to the backend. Set `PORT`, `DATA_DIR`, `LOG_TO_FILE`, or `SIMULATION_INTERVAL_MS` to customize the server. The default data directory is `./data`.
+The API listens on port 3000 and the Vite UI on port 5173. The UI proxies API requests to the backend. Set `PORT`, `DATA_DIR`, `LOG_TO_FILE`, `SIMULATION_INTERVAL_MS`, or `SIMULATION_SPEED` to customize the server. The default data directory is `./data`. The simulation runs at 10× speed by default; set `SIMULATION_SPEED` to `1` for real-time pacing (values above 100 are capped).
 
 ## Project layout
 

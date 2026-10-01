@@ -32,7 +32,7 @@ server.listen(config.port, "0.0.0.0", () => {
 });
 
 const simulationTimer = setInterval(() => {
-  market.tick();
+  market.tick(Date.now(), config.simulationSpeed);
   if (Date.now() - lastSavedAt >= 60_000) void persistState();
 }, config.simulationIntervalMs);
 

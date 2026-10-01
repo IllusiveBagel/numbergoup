@@ -90,6 +90,7 @@ function isTrade(value: unknown): value is Trade {
 export class MarketEngine {
   private state: PersistedState;
   private lastTickMs: number;
+  private elapsedSinceHistorySeconds = 0;
 
   constructor(
     initialState: PersistedState = createInitialState(),
@@ -165,10 +166,15 @@ export class MarketEngine {
     return trade;
   }
 
-  tick(now = Date.now()): void {
-    const elapsedSeconds = Math.min(Math.max((now - this.lastTickMs) / 1000, 0), 60);
+  tick(now = Date.now(), simulationSpeed = 1): void {
+    const wallElapsedSeconds = Math.min(Math.max((now - this.lastTickMs) / 1000, 0), 60);
+    const speed = Number.isFinite(simulationSpeed) && simulationSpeed > 0
+      ? Math.min(simulationSpeed, 100)
+      : 1;
+    const elapsedSeconds = wallElapsedSeconds * speed;
     if (elapsedSeconds === 0) return;
     const dt = elapsedSeconds / YEAR_SECONDS;
+    this.elapsedSinceHistorySeconds += elapsedSeconds;
     const marketMove = normalRandom(this.random);
     for (const stock of STOCKS) {
       const idiosyncraticMove = normalRandom(this.random);
@@ -182,10 +188,11 @@ export class MarketEngine {
       const roundedPrice = roundMoney(nextPrice);
       this.state.prices[stock.symbol] = roundedPrice;
       const history = this.state.history[stock.symbol] ?? [];
-      if (history.length === 0 || now - this.lastTickMs >= 60_000) {
+      if (history.length === 0 || this.elapsedSinceHistorySeconds >= 60) {
         this.state.history[stock.symbol] = [...history, roundedPrice].slice(-HISTORY_LIMIT);
       }
     }
+    this.elapsedSinceHistorySeconds %= 60;
     this.lastTickMs = now;
     this.state.lastUpdated = new Date(now).toISOString();
   }
