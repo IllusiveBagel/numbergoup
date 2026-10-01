@@ -36,7 +36,7 @@ export default function App() {
 
   useEffect(() => {
     void refresh();
-    const interval = window.setInterval(() => void refresh(), 5_000);
+    const interval = window.setInterval(() => void refresh(), 1_000);
     return () => window.clearInterval(interval);
   }, [refresh]);
 
