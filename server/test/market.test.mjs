@@ -56,6 +56,19 @@ test("continuous ticks move prices and retain a bounded price history", () => {
   assert.equal(market.snapshot().stocks[0].history.length, 60);
 });
 
+test("accelerated ticks advance price history in simulated time", () => {
+  const market = new MarketEngine(createInitialState(), () => 0.5);
+  const start = Date.now() + 1_000;
+
+  for (let second = 0; second < 5; second += 1) market.tick(start + second * 1_000, 10);
+  assert.equal(market.snapshot().stocks[0].history.length, 1);
+
+  market.tick(start + 5_000, 10);
+  const stock = market.snapshot().stocks[0];
+  assert.equal(stock.history.length, 2);
+  assert.notEqual(stock.price, stock.history[0]);
+});
+
 test("restores only valid known symbols from persisted state", () => {
   const restored = restoreState({
     cash: 123,
